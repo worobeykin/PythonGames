@@ -6,8 +6,7 @@ print("Welcome to the Guess My Word App")
 #init dictionary
 game_dict = {
     "classes":["mathematics", "philosophy", "science", "biology", "geography", "english"],
-    "fruits":["apple", "banana", "orange", "watermelon", "ananas", "kiwi"],
-    
+    "fruits":["apple", "banana", "orange", "watermelon", "ananas", "kiwi"],    
     }
 
 game_keys = []
@@ -32,11 +31,7 @@ while plaing:
     guess_count = 0
     loop = True
 
-    while game_word != guess:
-        
-        
-        
- 
+    while game_word != guess:    
             print(str(len(game_word)))
             guess_count += 1
             print("\nThe word is: " + (''.join(blank_word)))
@@ -53,11 +48,7 @@ while plaing:
                     if  blank_word[letter_index] == '-':
                         blank_word[letter_index] = game_word[letter_index]
                         flag = False
-                
-                        
-             
-                
-      
+                     
     game_end = input("\nWould you like to play again(y/n): ").strip().lower()
     if game_end == 'y':
         continue
