@@ -14,7 +14,7 @@ class Deck():
         self.deck = [] # Колода карт
         self.card_amount = 36
         self.trump = '' # Козырь
-        self.turn = bool #Очередность хода
+        self.turn = False #Очередность хода
         self.flag_hoda = bool 
 
         
@@ -134,55 +134,65 @@ def sord_field(field):
     
     
 
-def move(player, computer, field, whose_turn):
+def ataka(current_player, field, whose_turn):
     
     current_card = Card()
     if len(field.field) == 0:
+        print("TEST")
         
-        if whose_turn:  
-            current_card = computer.hand[0]
-            computer.hand.remove(current_card)
+#        if whose_turn:  
+        current_card = current_player.hand[0]
+#        print(current_player.hand[0].card_value)
+        current_player.hand.remove(current_card)
             
 #            sord_hand(computer, deck.trump.suit)
             
-            field.field.append(current_card)
+        field.field.append(current_card)
+        if whose_turn == False:
+            deck.turn = True
+        else:
             deck.turn = False
         
-        else:
+#        else:
             
-            current_card = player.hand[0]
-            player.hand.remove(current_card)
+#            current_card = player.hand[0]
+#            player.hand.remove(current_card)
             
 #            sord_hand(player, deck.trump.suit)
             
-            field.field.append(current_card)
-            deck.turn = True
+#            field.field.append(current_card)
+#            deck.turn = True
 
     else:
+        
         temp = sord_field(field)
         play = False
         
-        if whose_turn:
-            for card in temp:
-                for card_hand in computer.hand:
-                    if card.weight == card_hand.weight:
-                        current_card = card_hand
-                        field.field.append(current_card)
-                        computer.hand.remove(current_card)
-                        deck.turn = False
-                        play = True
-                        break
-        else:
-            for card in temp:
-                for card_hand in player.hand:
-                    if card.weight == card_hand.weight:
-                        current_card = card_hand
-                        field.field.append(current_card)
-                        player.hand.remove(current_card)
+#        if whose_turn:
+        for card in temp:
+            for card_hand in current_player.hand:
+                if card.weight == card_hand.weight:
+                    current_card = card_hand
+                    field.field.append(current_card)
+                    current_player.hand.remove(current_card)
+                    if whose_turn == False:
                         deck.turn = True
-                        play = True
-                        break
+                    else:
+                        deck.turn = False
+                    play = True
+                    break
+##        else:
+##            for card in temp:
+##                for card_hand in player.hand:
+##                    if card.weight == card_hand.weight:
+##                        current_card = card_hand
+##                        field.field.append(current_card)
+##                        player.hand.remove(current_card)
+##                        deck.turn = True
+##                        play = True
+##                        break
         if not play:
+            
             deck.flag_hoda = False
          
                     
@@ -192,55 +202,85 @@ def move(player, computer, field, whose_turn):
     return current_card
                 
                 
-def every_step(player, computer, field, current_card, whose_turn):
+def zashita(current_player, field, current_card, whose_turn):
 
 #    current_card = Card()
 
-    if whose_turn:
+#    if whose_turn:
 ##        if len(field.field) == 0:
 ##            current_card = computer.hand[0]
 ##            computer.hand.remove(current_card)
 ##            deck.turn = False
-            
-        for card in computer.hand:
-            if (card.suit == current_card.suit and card.weight > current_card.weight) or (current_card.suit != deck.trump.suit and card.suit == deck.trump.suit):
-                current_card2 = card
-                computer.hand.remove(current_card2)
+           
+    for card in current_player.hand:
+        flag = True  
+        if card.suit == current_card.suit and card.weight > current_card.weight and flag:
+            flag = False   
+            current_card2 = card
+            print("sf")
+            current_player.hand.remove(current_card2)
 #                two_cards.append(current_card)
-                field.field.append(current_card2)
-                deck.turn = False
-                deck.flag_hoda = True
-                break
-            
-        print("TEST")
-        if not deck.turn:
-            
-            deck.flag_hoda = False
-            computer.hand.extend(field.field)
-            field.field.clear()
-
-    else:
-##        if len(field.field) == 0:
-##            current_card = player.hand[0]
-##            computer.hand.remove(current_card)
-##            deck.turn = False
-            
-        for card in player.hand:
-            if (card.suit == current_card.suit and card.weight > current_card.weight) or (current_card.suit != deck.trump.suit and card.suit == deck.trump.suit):
-                current_card2 = card
-                player.hand.remove(current_card2)
-#                two_cards.append(current_card)
-                field.field.append(current_card2)
+            field.field.append(current_card2)
+#                deck.turn = False
+            if whose_turn == False:
                 deck.turn = True
-                deck.flag_hoda = True
-                break
+            else:
+                deck.turn = False
+            deck.flag_hoda = True
+            flag = False 
             
-        print("TEST")
-        if deck.turn:
+            break
+       
+        if current_card.suit != deck.trump.suit and card.suit == deck.trump.suit and flag:
+            current_card2 = card
+            current_player.hand.remove(current_card2)
+#                two_cards.append(current_card)
+            field.field.append(current_card2)
+#                deck.turn = False
+            if whose_turn == False:
+                deck.turn = True
+            else:
+                deck.turn = False
+            deck.flag_hoda = True
+            break
+        
+        else:
             
             deck.flag_hoda = False
-            player.hand.extend(field.field)    
-            field.field.clear()
+#            step = False
+    if deck.flag_hoda == False:
+        current_player.hand.extend(field.field)
+
+#    print("TEST")
+#    if not deck.turn:
+
+##        if not step:    
+##            deck.flag_hoda = False
+##            current_player.hand.extend(field.field)
+##            field.field.clear()
+
+##    else:
+####        if len(field.field) == 0:
+####            current_card = player.hand[0]
+####            computer.hand.remove(current_card)
+####            deck.turn = False
+##            
+##        for card in player.hand:
+##            if (card.suit == current_card.suit and card.weight > current_card.weight) or (current_card.suit != deck.trump.suit and card.suit == deck.trump.suit):
+##                current_card2 = card
+##                player.hand.remove(current_card2)
+###                two_cards.append(current_card)
+##                field.field.append(current_card2)
+##                deck.turn = True
+##                deck.flag_hoda = True
+##                break
+##            
+##        print("TEST")
+##        if deck.turn:
+##            
+##            deck.flag_hoda = False
+##            player.hand.extend(field.field)    
+##            field.field.clear()
                 
     print("\nОтбиваемся картой: ", current_card2.card_value, current_card2.suit)
     return current_card2
@@ -321,10 +361,11 @@ while playing:
 
     user = Players()
     comp = Players()
+    current_player = Players()
 
     field = Field()
     current_card = Card()
-    
+    winner = False
 
 
     game_round = True
@@ -332,14 +373,15 @@ while playing:
 
         field.field.clear()
 
-        razdaca_cards(user, comp)
+        razdaca_cards(user, comp, winner)
 
         user = sord_hand(user, deck.trump.suit)
         comp = sord_hand(comp, deck.trump.suit)
 
         if len(deck.deck) == 24:
-            whose_turn = which_first(user, comp, deck)
-            deck.turn = whose_turn
+            deck.turn = which_first(user, comp, deck)
+
+        
 
         monitor(deck, user, comp, current_card, field)
         
@@ -350,25 +392,42 @@ while playing:
         deck.flag_hoda = True
         while deck.flag_hoda:
 #            if len(field.field) == 0:
-            current_card = move(user, comp, field, deck.turn)
-            if deck.flag_hoda:
-                current_card2 = every_step(user, comp, field, current_card, deck.turn)
+
+            if deck.turn == True:
+                current_player = comp
+            else:
+                current_player = user
+
+            current_card = ataka(current_player, field, deck.turn)
+ 
+            if step:
+
+                if deck.turn == True:
+                    current_player = comp
+                else:
+                    current_player = user
+                current_card2 = zashita(current_player, field, current_card, deck.turn)
+
 
             else:
                 break
-##                if deck.turn:
-##                    comp.hand.extend(field.field)
-##                    break
+##            ataka()
+##            if ataka == True:
+##                current_card = ataka(current_player, field, deck.turn)
+##                zashita()
+##                if zashita == True:
+##                    current_card = zashita(current_player, field, current_card, deck.turn)
 ##                else:
-##                    user.hand.extend(field.field)
-##                    break
-#            if deck.flag_hoda:
-
-
-
-#            field.field.append(current_card2)
-#            else:
-#                step = False
+##                    add_to_hand()
+##
+##
+##            else:
+##                zashita(current_player, field, current_card, deck.turn)
+##                if zashita == False:
+##                    uhod_v_bitu()
+##                    deck.flag_hoda = False
+                    
+#                deck.flag_hoda = False
                 
             
 
