@@ -358,6 +358,12 @@ while playing:
         step = True
         deck.flag_hoda = True
         while deck.flag_hoda:
+            if len(deck.deck) == 0 and len(current_player.hand) == 0:
+                    playing = False
+                    game_round = False
+                    deck.flag_hoda = False
+                    print("Победа курент плеир")
+                    break
 
 #            posibility = ataka_proverka(current_player, field)
             if ataka_proverka(current_player, field, current_card):
@@ -401,12 +407,7 @@ while playing:
 
                     field.field.clear()
                     
-                if len(deck.deck) == 0 and len(current_player.hand) == 0:
-                    playing = False
-                    game_round = False
-                    deck.flag_hoda = False
-                    print("Победа курент плеир")
-                    break
+                
 
 
             else:
